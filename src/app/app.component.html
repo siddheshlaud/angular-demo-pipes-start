@@ -1,16 +1,46 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <div class="row">
+        <div class="col-xs-5">
+          <label for="filterById">Filter By: Status</label>
+          <input 
+            type="text" 
+            id="filterById"
+            class="form-control"
+            [(ngModel)]="filterBy">
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-xs-5">
+          <label for="sortById">Sort By: {{sortBy}}</label>
+          <select id="sortById" class="form-control" [(ngModel)]="sortBy">
+            <option value="instanceType">Instance Type</option>
+            <option value="name">Name</option>
+            <option value="status">Status</option>
+            <option value="started">Started</option>
+          </select>
+        </div>
+      </div>
+      <hr />
+      <br>
+      <br>
+      <h4>{{appStatus | async}}</h4>
+      <br>
+      <br>
       <ul class="list-group">
         <li
           class="list-group-item"
-          *ngFor="let server of servers"
+          *ngFor="let server of servers | filter:filterBy:'status' | sortBy:sortBy "
           [ngClass]="getStatusClasses(server)">
           <span
             class="badge">
             {{ server.status }}
           </span>
-          <strong>{{ server.name }}</strong> | {{ server.instanceType }} | {{ server.started }}
+          <strong>{{ server.name | shorten:15}}</strong> |
+           {{ server.instanceType | uppercase | reverse}} |
+            {{ server.started | date:'fullDate' | uppercase}}
         </li>
       </ul>
     </div>
